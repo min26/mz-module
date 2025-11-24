@@ -1,0 +1,15 @@
+name: min_module
+
+build:
+  ## path to Kconfig file
+  kconfig: kconfig
+
+  ## path to folder of CMakeLists.txt
+  cmake: .
+
+  settings:
+    ## additional board roots
+    board_root: .
+    
+    ## additional dts/bindings, if need.
+    dts_root: .

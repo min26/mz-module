@@ -1,0 +1,7 @@
+# This Kconfig file is picked by zephyr build system.
+# It is defined as a module Kconfig entry point (zephyr/module.yml)
+#
+
+rsource "drivers/Kconfig"
+
+

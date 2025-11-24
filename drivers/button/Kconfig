@@ -1,0 +1,9 @@
+## Create new option in menuconfig
+config MG_BUTTON
+    bool "MG-Button"
+    default n       # Set disable by default
+    depends on GPIO # Dependent on GPIO driver
+    help
+        Enable MG-Button driver
+
+

@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+
+cmake_minimum_required(VERSION 3.20.0)
+
+## adding board root (with boards folder)
+set(BOARD_ROOT ${CMAKE_SOURCE_DIR}/../..)
+set(BOARD fmuk66)
+
+
+## adding drivers root (location of module's CMakeList)
+set(ZEPHYR_EXTRA_MODULES ${CMAKE_SOURCE_DIR}/../..)
+
+
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+project(blinky)
+
+target_sources(app PRIVATE src/main.c)
