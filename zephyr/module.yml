@@ -1,4 +1,4 @@
-name: min_module
+name: mz_module
 
 build:
   ## path to Kconfig file

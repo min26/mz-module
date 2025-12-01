@@ -1,4 +1,4 @@
 
-rsource "button/Kconfig"
-
+rsource "switch/Kconfig"
+rsource "led/Kconfig"
 

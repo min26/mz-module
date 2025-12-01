@@ -1,0 +1,9 @@
+## Create new option in menuconfig
+config MZ_BUTTON
+    bool "MZ-module, Switch"
+    default n       # Set disable by default
+    depends on GPIO # Dependent on GPIO driver
+    help
+        Enable MZ module, switch driver
+
+

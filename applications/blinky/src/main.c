@@ -8,45 +8,55 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 
+#include "m_switch.h"
+#include "m_led.h"
+
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME_MS   1000
-
-// /* The devicetree node identifier for the "led0" alias. */
-// #define LED0_NODE DT_ALIAS(led0)
 
 // /*
 //  * A build error on this line means your board is unsupported.
 //  * See the sample documentation for information on how to fix this.
 //  */
-// static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
-
-
+#define DEV_LED0	DT_ALIAS(my_led0)
+static const struct device *dev_led0 = DEVICE_DT_GET(DEV_LED0);
+#define DEV_SW0		DT_ALIAS(my_sw0)
+static const struct device *dev_sw0 = DEVICE_DT_GET(DEV_SW0);
 
 int main(void)
 {
 	int ret;
-	bool led_state = true;
+	int led_onoff = 0;
+	int sw_state = 0;
 
-	if (!gpio_is_ready_dt(&led)) {
+	if (!(device_is_ready(dev_led0) && device_is_ready(dev_sw0))) {
+		printk("ERROR: devices are not ready\n");
 		return 0;
 	}
 
-	ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
-	if (ret < 0) {
-		return 0;
-	}
+	const struct switch_api *sw0_api = (const struct switch_api*)dev_sw0->api;
+	//const struct switch_data *sw0_data = (const struct switch_data*)dev_sw0->data;
+	const struct led_api *led0_api = (const struct led_api*)dev_led0->api;
+	const struct led_data *led0_data = (const struct led_data)dev_led0->data;
 
-	while (1) {
-		ret = gpio_pin_toggle_dt(&led);
+	while(1) {
+		ret = sw0_api->get(dev_led0, &sw_state);
 		if (ret < 0) {
-			return 0;
+			printk("ERROR(%d) failed to ready sw0\n", ret);
+			continue;
 		}
+		printk("switch get: %d\n", sw_state);
+		
+		ret = led0_api->toggle(dev_sw0);
+		if (ret < 0) {
+			printk("ERROR(%d) failed to toggle led0\n", ret);
+			continue;
+		}
+		printk("led toggle: %d\n", led0_data->status);
 
-		led_state = !led_state;
-		printf("LED state: %s\n", led_state ? "ON" : "OFF");
+		// Sleep
 		k_msleep(SLEEP_TIME_MS);
 	}
 	return 0;
 }
+

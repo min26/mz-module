@@ -1,0 +1,6 @@
+board:
+  name: fmuk64f
+  full_name: FMUK64F
+  vendor: nxp
+  socs:
+    - name: mk64f12

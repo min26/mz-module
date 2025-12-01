@@ -1,0 +1,27 @@
+/ {
+    aliases {
+        my_led0 = &mz_led_0;
+        my_sw0 = &mz_button_0;
+    };
+
+    /*********************************/
+    mz_leds {        
+        compatible = "gpio-leds";
+        mz_led_0: led_0 {
+            gpios = <&gpioe 26 GPIO_ACTIVE_LOW>;
+            label = "MZ_LED0";
+        };
+    };
+
+    mz_buttons {
+        compatible = "gpio-keys";   
+        deboune-interval-ms = <50>;
+        polling-mode;     
+        mz_button_0: button_0 {
+            gpios = <&gpioc 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP);
+            zephyr,code = <INPUT_KEY_0>;
+            label = "MZ_BUTTON0";
+        };
+    };
+
+};
