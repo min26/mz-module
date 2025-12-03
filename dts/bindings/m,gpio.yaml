@@ -1,8 +1,8 @@
 # Description of drivers
-description: MZ module, Switch
+description: Zephyr Module, GPIO
 
 # Compatibility string, matches with DTS and C (DT_DRV_COMPAT)
-compatible: "mz,switch"
+compatible: "m,gpio"
 
 # Define node properties
 properties:

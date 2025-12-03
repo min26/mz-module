@@ -1,9 +1,9 @@
 ## Create new option in menuconfig
-config MZ_LED
-    bool "MZ-module, led"
+config M_GPIO
+    bool "M GPIO DRIVER"
     default n       # Set disable by default
     depends on GPIO # Dependent on GPIO driver
     help
-        Enable MZ module, led driver
+        Enable m_gpio driver
 
 

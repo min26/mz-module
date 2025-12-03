@@ -4,8 +4,11 @@
         my_sw0 = &mz_button_0;
     };
 
+
     /*********************************/
-    mz_leds {        
+    /** ? use compatible = "m_gpio" instead of "gpio-keys" ? */
+    
+    m_leds {        
         compatible = "gpio-leds";
         mz_led_0: led_0 {
             gpios = <&gpioe 26 GPIO_ACTIVE_LOW>;
@@ -13,7 +16,7 @@
         };
     };
 
-    mz_buttons {
+    m_buttons {
         compatible = "gpio-keys";   
         deboune-interval-ms = <50>;
         polling-mode;     

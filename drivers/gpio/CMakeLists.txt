@@ -3,7 +3,7 @@
 zephyr_library()
 
 # List source code files 
-zephyr_library_sources(m_led.c)
+zephyr_library_sources(m_gpio.c)
 
 # Add header file directories
 zephyr_include_directories(.)

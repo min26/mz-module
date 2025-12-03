@@ -8,8 +8,8 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 
-#include "m_switch.h"
-#include "m_led.h"
+#include "m_gpio.h"
+
 
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME_MS   1000
@@ -34,10 +34,10 @@ int main(void)
 		return 0;
 	}
 
-	const struct switch_api *sw0_api = (const struct switch_api*)dev_sw0->api;
+	const struct m_gpio_api *sw0_api = (const struct m_gpio_api*)dev_sw0->api;
 	//const struct switch_data *sw0_data = (const struct switch_data*)dev_sw0->data;
-	const struct led_api *led0_api = (const struct led_api*)dev_led0->api;
-	const struct led_data *led0_data = (const struct led_data)dev_led0->data;
+	const struct m_gpio_api *led0_api = (const struct m_gpio_api*)dev_led0->api;
+	//const struct led_data *led0_data = (const struct led_data)dev_led0->data;
 
 	while(1) {
 		ret = sw0_api->get(dev_led0, &sw_state);

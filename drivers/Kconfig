@@ -1,4 +1,3 @@
 
-rsource "switch/Kconfig"
-rsource "led/Kconfig"
+rsource "gpio/Kconfig"
 
