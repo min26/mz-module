@@ -26,8 +26,8 @@ static const struct device *dev_sw0 = DEVICE_DT_GET(DEV_SW0);
 int main(void)
 {
 	int ret;
-	int led_onoff = 0;
-	int sw_state = 0;
+	int state_led = 0;
+	int state_sw = 0;
 
 	if (!(device_is_ready(dev_led0) && device_is_ready(dev_sw0))) {
 		printk("ERROR: devices are not ready\n");
@@ -40,23 +40,25 @@ int main(void)
 	//const struct led_data *led0_data = (const struct led_data)dev_led0->data;
 
 	while(1) {
-		ret = sw0_api->get(dev_led0, &sw_state);
+		ret = sw0_api->get(dev_sw0, &state_sw);
 		if (ret < 0) {
-			printk("ERROR(%d) failed to ready sw0\n", ret);
-			continue;
+			printk("ERROR(%d) failed to get sw0\n", ret);
+		} else {
+			printk("Switch-get: %d\n", state_sw);
 		}
-		printk("switch get: %d\n", sw_state);
+		
 		
 		ret = led0_api->toggle(dev_sw0);
 		if (ret < 0) {
 			printk("ERROR(%d) failed to toggle led0\n", ret);
-			continue;
+		} else {
+			printk("led-toggle\n");
 		}
-		printk("led toggle: %d\n", led0_data->status);
 
 		// Sleep
 		k_msleep(SLEEP_TIME_MS);
 	}
+	
 	return 0;
 }
 

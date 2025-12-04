@@ -1,0 +1,41 @@
+/ {
+    aliases {
+        my_led0 = &m_led0;
+        my_sw0 = &m_button0;
+    };
+
+    m_leds {
+        compatible = "m,gpio";
+        m_led0: led0 {
+            pin = <&user_led0>;
+        };
+    };    
+
+    m_buttons {
+        compatible = "m,gpio";
+        m_button0: button0 {
+            pin = <&user_button0>;
+        }
+    };
+   
+    overlay_leds {        
+        compatible = "gpio-leds";
+
+        user_led0: led_0 {
+            label = "Led0 b22";
+            gpios = <&gpiob 22 GPIO_ACTIVE_LOW>;
+        };
+    };
+
+    overlay_gpio_keys {
+        compatible = "gpio-keys";   
+        deboune-interval-ms = <50>;
+        polling-mode;     
+
+        user_button0: button_0 {
+            label = "Button0 c6"
+            gpios = <&gpioc 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP);
+        };
+    };
+
+};

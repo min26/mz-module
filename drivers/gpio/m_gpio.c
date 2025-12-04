@@ -1,5 +1,7 @@
 
-// #define DT_DRV_COMPAT mz_button
+// Matching compatible binding-yaml, devicetree-dts, header
+// compatible="m,gpio"
+#define DT_DRV_COMPAT m_gpio
 
 
 #include <errno.h>
@@ -27,7 +29,7 @@ LOG_MODULE_REGISTER(gpio);
 // static int m_gpio_toggle(const struct device *dev);
 
 /**
- * 
+ * Call by zephyr kernel
  */
 static int m_gpio_init(const struct device *dev)
 {
@@ -36,7 +38,7 @@ static int m_gpio_init(const struct device *dev)
     const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
     const struct gpio_dt_spec *gpio_dt = &cfg->dt;
 
-    LOG_DBG("Initialize Button Driver ID: %u\n",cfg->id);
+    LOG_DBG("Initialize M-GPIO Driver ID: %u\n",cfg->id);
 
     // Check button device is ready
     if (!gpio_is_ready_dt(gpio_dt)) {
@@ -46,6 +48,9 @@ static int m_gpio_init(const struct device *dev)
     return 0;
 }
 
+/**
+ * Call by m_gpio_api
+ */
 static int m_gpio_config(const struct device *dev, int state)
 {
     const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
@@ -63,7 +68,7 @@ static int m_gpio_config(const struct device *dev, int state)
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_INPUT);
     }    
     if (ret != 0) {
-        LOG_ERR("Could not configure GPIO %d\n",state);
+        LOG_ERR("ERROR(%d) Failed to configure GPIO-%d\n",ret, state);
         return -ENODEV;
     }
 
@@ -95,7 +100,7 @@ static int m_gpio_set(const struct device *dev, int state)
     const struct gpio_dt_spec *gpio_dt = &cfg->dt;
     // const struct m_gpio_data *data = (const struct m_gpio_data *)dev->data;
     // 
-    ret = gpio_pin_set_dt(led, state);
+    ret = gpio_pin_set_dt(gpio_dt, state);
     // data->state = ret;
     if (ret < 0) {
         LOG_ERR("ERROR(%d) failed to set pin\n", ret);
@@ -105,6 +110,22 @@ static int m_gpio_set(const struct device *dev, int state)
     return 0;
 }
 
+static int m_gpio_toggle(const struct device *dev)
+{
+    int ret;
+    const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
+    const struct gpio_dt_spec *gpio_dt = &cfg->dt;
+    // const struct m_gpio_data *data = (const struct m_gpio_data *)dev->data;
+    // 
+    ret = gpio_pin_toggle_dt(gpio_dt);
+    // data->state = ret;
+    if (ret < 0) {
+        LOG_ERR("ERROR(%d) failed to toggle pin\n", ret);
+        return ret;
+    }
+
+    return 0;
+}
 /*********************************************************
  *  Device Tree Handling
  */
@@ -136,7 +157,7 @@ static const struct m_gpio_api m_gpio_api_func = {
                     CONFIG_GPIO_INIT_PRIORITY,              \
                     &m_gpio_api_func);                  
 
-// Devicetree build calls this to create an instance for each button device
+// Devicetree-build calls this to create an instance for each device
 DT_INST_FOREACH_STATUS_OKAY(M_GPIO_DEFINE)
 
 /****************************************************** */

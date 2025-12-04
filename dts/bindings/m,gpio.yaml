@@ -1,7 +1,11 @@
-# Description of drivers
-description: Zephyr Module, GPIO
+## reference yaml file: zephyr/dts/bindings/input/gpio-keys.yaml
 
-# Compatibility string, matches with DTS and C (DT_DRV_COMPAT)
+
+
+# Description of drivers
+description: Zephyr Module, M-GPIO
+
+# Compatibility string, matches with DTS and C (DT_DRV_COMPAT m_gpio)
 compatible: "m,gpio"
 
 # Define node properties

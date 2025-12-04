@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.20.0)
 
 ## adding board root (with boards folder)
 set(BOARD_ROOT ${CMAKE_SOURCE_DIR}/../..)
-set(BOARD fmuk66)
+set(BOARD fmuk64f)
 
 
 ## adding drivers root (location of module's CMakeList)
