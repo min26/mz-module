@@ -18,9 +18,11 @@
 //  * A build error on this line means your board is unsupported.
 //  * See the sample documentation for information on how to fix this.
 //  */
-#define DEV_LED0	DT_ALIAS(my_led0)
+
+// Alias allows only characters
+#define DEV_LED0	DT_ALIAS(myled0)
 static const struct device *dev_led0 = DEVICE_DT_GET(DEV_LED0);
-#define DEV_SW0		DT_ALIAS(my_sw0)
+#define DEV_SW0		DT_ALIAS(mysw0)
 static const struct device *dev_sw0 = DEVICE_DT_GET(DEV_SW0);
 
 int main(void)

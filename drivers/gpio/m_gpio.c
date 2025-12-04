@@ -68,7 +68,7 @@ static int m_gpio_config(const struct device *dev, int state)
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_INPUT);
     }    
     if (ret != 0) {
-        LOG_ERR("ERROR(%d) Failed to configure GPIO-%d\n",ret, state);
+        // LOG_ERR("ERROR(%d) Failed to configure GPIO\n", ret);
         return -ENODEV;
     }
 
@@ -86,7 +86,7 @@ static int m_gpio_get(const struct device *dev, int *state)
     ret = gpio_pin_get_dt(gpio_dt);
     // data->state = ret;
     if (ret < 0) {
-        LOG_ERR("ERROR(%d) failed to get pin\n", ret);
+        // LOG_ERR("ERROR(%d) failed to get pin\n", ret);
         return ret;
     } 
     *state = ret;    
@@ -103,7 +103,7 @@ static int m_gpio_set(const struct device *dev, int state)
     ret = gpio_pin_set_dt(gpio_dt, state);
     // data->state = ret;
     if (ret < 0) {
-        LOG_ERR("ERROR(%d) failed to set pin\n", ret);
+        // LOG_ERR("ERROR(%d) failed to set pin\n", ret);
         return ret;
     }
 
@@ -141,7 +141,7 @@ static const struct m_gpio_api m_gpio_api_func = {
     /* Create instance of config struct */                  \
     static const struct m_gpio_conf m_gpio_conf_##inst = {  \
         .dt = GPIO_DT_SPEC_GET(DT_PHANDLE(DT_INST(inst,m_gpio),pin),gpios),\
-        .id = inst                                          \
+        .id = inst,                                         \
     };                                                      \
     /* Create value of data struct */                       \
     static const struct m_gpio_data m_gpio_data_##inst = {  \
@@ -152,7 +152,7 @@ static const struct m_gpio_api m_gpio_api_func = {
                     m_gpio_init,                            \
                     NULL,                                   \
                     &m_gpio_data_##inst,                    \
-                    &m_gpio_config_##inst,                  \
+                    &m_gpio_conf_##inst,                    \
                     POST_KERNEL,                            \
                     CONFIG_GPIO_INIT_PRIORITY,              \
                     &m_gpio_api_func);                  

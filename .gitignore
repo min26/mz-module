@@ -58,3 +58,6 @@ dkms.conf
 build/
 dist/
 out/
+
+applications/*/build/
+applications/blinky/build/*
