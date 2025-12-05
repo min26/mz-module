@@ -64,7 +64,7 @@ static int m_gpio_config(const struct device *dev, int state)
     }
     // Set button 
     if (state == 0) {
-        ret = gpio_pin_configure_dt(gpio_dt, GPIO_OUPUT_INACTIVE);
+        ret = gpio_pin_configure_dt(gpio_dt, GPIO_OUTPUT_INACTIVE);
     } else {
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_INPUT);
     }    
