@@ -2,7 +2,7 @@ name: mz_module
 
 build:
   ## path to Kconfig file
-  kconfig: kconfig
+  kconfig: Kconfig
 
   ## path to folder of CMakeLists.txt
   cmake: .

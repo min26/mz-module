@@ -53,6 +53,7 @@ static int m_gpio_init(const struct device *dev)
  */
 static int m_gpio_config(const struct device *dev, int state)
 {
+    int ret;
     const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
     const struct gpio_dt_spec *gpio_dt = &cfg->dt;
     
