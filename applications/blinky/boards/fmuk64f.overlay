@@ -1,4 +1,8 @@
 / {
+    chosen {
+        zephyr,console = &cdc_acm_uart0;
+    };
+
     aliases {
         myled0 = &m_led0;
         mysw0 = &m_button0;
@@ -38,4 +42,11 @@
         };
     };
 
+};
+
+&zephyr_udc0 {
+    cdc_acm_uart0: cdc_acm_uart0 {
+        compatible = "zephyr,cdc-acm-uart";
+        label = "USB CDC ACM";
+    };
 };

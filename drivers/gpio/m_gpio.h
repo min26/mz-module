@@ -1,7 +1,8 @@
 
-#ifndef _DRIVER_GPIO_H_
-#define _DRIVER_GPIO_H_
+#ifndef _DRIVER_M_GPIO_H_
+#define _DRIVER_M_GPIO_H_
 
+#include <stdint.h>
 #include <zephyr/drivers/gpio.h>
 
 
@@ -21,4 +22,4 @@ struct m_gpio_data {
     int state;  
 };
 
-#endif /* _DRIVER_GPIO_H_*/
+#endif /* _DRIVER_M_GPIO_H_*/

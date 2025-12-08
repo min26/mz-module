@@ -1,0 +1,60 @@
+# This file contains Kconfig options and defaults for configuring USB devices
+# using the new experimental USB device support. The scope of these options is
+# limited to USB samples in project tree, you cannot use them in your own
+# application.
+
+menu "USB DEVICE options"
+	depends on USB_DEVICE_STACK_NEXT
+
+config USB_DEVICE_MANUFACTURER
+	string "USB device manufacturer string"
+	default "Zephyr Project"
+	help
+	  USB device manufacturer string.
+
+config USB_DEVICE_PRODUCT
+	string "USB device product string"
+	default "USB DEVICE"
+	help
+	  USB device product string.
+
+config USB_DEVICE_VID
+	hex "USB device Vendor ID"
+	default 0x2fe3
+	help
+	  USB device sample Vendor ID. The default id (0x2fe3) is associated to
+	  Zephyr Project, you must use your own VID for samples and applications
+	  outside of Zephyr Project.
+
+config USB_DEVICE_PID
+	hex "USB device Product ID"
+	default 0x0001
+	help
+	  USB device sample Product ID. You must use your own PID for samples
+	  and applications outside of Zephyr Project.
+
+config USB_DEVICE_SELF_POWERED
+	bool "USB device Self-powered attribute"
+	default y
+	help
+	  Set the Self-powered attribute in configuration.
+
+config USB_DEVICE_REMOTE_WAKEUP
+	bool "USB device Remote Wakeup attribute"
+	help
+	  Set the Remote Wakeup attribute in configuration.
+
+config USB_DEVICE_MAX_POWER
+	int "USB device bMaxPower value"
+	default 125
+	range 0 250
+	help
+	  bMaxPower value in configuration, in 2 mA units.
+
+config USB_DEVICE_20_EXTENSION_DESC
+	bool "Use default USB 2.0 Extension Descriptor"
+	depends on USBD_BOS_SUPPORT
+	help
+	  Set bcdUSB value to 0201 and use default USB 2.0 Extension Descriptor.
+
+endmenu

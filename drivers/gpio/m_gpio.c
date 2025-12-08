@@ -3,13 +3,13 @@
 // compatible="m,gpio"
 #define DT_DRV_COMPAT m_gpio
 
+#include "m_gpio.h"
+
+#include <zephyr/device.h>
 
 #include <errno.h>
 #include <zephyr/logging/log.h>
-#include "m_gpio.h"
-
-
-LOG_MODULE_REGISTER(gpio);
+LOG_MODULE_REGISTER(m_gpio);
 
 // #define MY_SWITCH DT_ALIAS(mz_switch)
 // #if DT_NODE_HAS_STATUS(MY_SWITCH, okay)
