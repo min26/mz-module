@@ -162,3 +162,5 @@ static const struct m_gpio_api m_gpio_api_func = {
 DT_INST_FOREACH_STATUS_OKAY(M_GPIO_DEFINE)
 
 /****************************************************** */
+
+

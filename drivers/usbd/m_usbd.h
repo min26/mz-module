@@ -30,4 +30,8 @@ struct usbd_context *m_usbd_init_device(usbd_msg_cb_t msg_cb);
  */
 struct usbd_context *m_usbd_setup_device(usbd_msg_cb_t msg_cb);
 
+
+// usbd thread task
+void m_usbd_task(void *arg1, void *arg2, void *arg3);
+
 #endif /* _M_USBD_INIT_H_ */

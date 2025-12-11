@@ -4,14 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <stdint.h>
 
+#include "m_usbd.h"
 #include <zephyr/device.h>
-#include <zephyr/usb/usbd.h>
 #include <zephyr/usb/bos.h>
+#include <zephyr/usb/usb_device.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/uart.h>
+#include <zephyr/sys/ring_buffer.h>
 
 #include <zephyr/logging/log.h>
-LOG_MODULE_REGISTER(m_usbd_config);
+LOG_MODULE_REGISTER(m_usbd);
+
+
+
+#define SLEEP_TIME_MS   1000
+
+
 
 /* By default, do not register the USB DFU class DFU mode instance. */
 static const char *const blocklist[] = {
@@ -203,4 +212,18 @@ struct usbd_context *m_usbd_init_device(usbd_msg_cb_t msg_cb)
 	/* doc device init end */
 
 	return &m_usbd;
+}
+
+
+
+// usbd thread task
+void m_usbd_task(void *arg1, void *arg2, void *arg3)
+{
+	int ret;
+	int state = 0;
+	while(1) {
+		state = !state;
+
+		k_msleep(SLEEP_TIME_MS);
+	}
 }
