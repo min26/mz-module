@@ -10,7 +10,7 @@
 #include <zephyr/logging/log.h>
 
 #include "m_gpio.h"
-#include "m_usbd.h"
+// #include "m_usbd.h"
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -18,99 +18,131 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 // Multi-thread define -------------------------------
 #define SLEEP_TIME_MS   1000
 #define MY_THREAD_STACK_SIZE	256
-// Define Stack areas for threads
-K_THREAD_STACK_DEFINE(usbd_stack, MY_THREAD_STACK_SIZE);
-static struct k_thread usbd_thread;
 
-K_THREAD_STACK_DEFINE(sw0_stack, MY_THREAD_STACK_SIZE);
-static struct k_thread sw0_thread;
+// Define Stack areas for threads
+K_THREAD_STACK_DEFINE(stack_led0, MY_THREAD_STACK_SIZE);
+static struct k_thread thread_led0;
+
+K_THREAD_STACK_DEFINE(stack_sw0, MY_THREAD_STACK_SIZE);
+static struct k_thread thread_sw0;
+
+// Binary semaphore(initial count 0, limit 1)
+K_SEM_DEFINE(my_sem, 0, 1)
+
 
 // USB Device -----------------------------------------------
-#define DEV_USB_CDC		DT_CHOSEN(zephyr_console)
-BUILD_ASSERT(DT_NODE_HAS_COMPAT(DEV_USB_CDC, zephyr_cdc_acm),
-			"Console device is not ACM CDC");
-static const struct device *const dev_usb = DEVICE_DT_GET(DEV_USB_CDC);
+// #define DEV_USB_CDC		DT_CHOSEN(zephyr_console)
+// BUILD_ASSERT(DT_NODE_HAS_COMPAT(DEV_USB_CDC, zephyr_cdc_acm),
+// 			"Console device is not ACM CDC");
+// static const struct device *const dev_usb = DEVICE_DT_GET(DEV_USB_CDC);
 
 // LED, Switch Device ---------------------------------------
-#define DEV_LED0	DT_ALIAS(myled0)
-static const struct device *dev_led0 = DEVICE_DT_GET(DEV_LED0);
 #define DEV_SW0		DT_ALIAS(mysw0)
 static const struct device *dev_sw0 = DEVICE_DT_GET(DEV_SW0);
+#define DEV_LED0	DT_ALIAS(myled0)
+static const struct device *dev_led0 = DEVICE_DT_GET(DEV_LED0);
+
+// Public func -------------------------------
+// m_gpio_state_t led0_state = OFF;
 
 
 
-void m_sw0_task(void arg1, void arg2, void arg3)
+void thread_sw0_func(void arg1, void arg2, void arg3)
 {
 	int ret;
-	int state_sw = 0;
+	int sw_state = 0;
 	
-	if (!(device_is_ready(dev_sw0))) {
-		printk("ERROR:SW0 device is not ready\n");
+	if (!device_is_ready(dev_sw0)) {
+		printk("ERROR:SW0 is not ready\n");
 		return;
 	}
 	const struct m_gpio_api *sw0_api = (const struct m_gpio_api*)dev_sw0->api;
 	//const struct switch_data *sw0_data = (const struct switch_data*)dev_sw0->data;
 	
 	while(1) {
-		ret = sw0_api->get(dev_sw0, &state_sw);
+		ret = sw0_api->get(dev_sw0, &sw_state);
 		if (ret < 0) {
 			printk("ERROR:SW0(%d) failed to get\n", ret);
 		} else {
-			printk("Switch-get: %d\n", state_sw);
+			printk("Switch-get: %d\n", sw_state);
+			if (sw_state) led_state_set(TOGGLE);
 		}
 		k_msleep(SLEEP_TIME_MS);
 	}
 }
 
-
-
-int main(void)
+void thread_led0_func(void arg1, void arg2, void arg3)
 {
 	int ret;
-	k_tid_t usbd_tid, sw0_tid;
 
-	int state_led = 0;
-	if (!(device_is_ready(dev_led0))) {
-		printk("ERROR:LED0 devices is not ready\n");
-		return 0;
-	}	
+	if (!device_is_ready(dev_led0)) {
+		printk("ERROR:LED0 is not ready\n)");
+		return;
+	}
 	const struct m_gpio_api *led0_api = (const struct m_gpio_api*)dev_led0->api;
 	//const struct led_data *led0_data = (const struct led_data)dev_led0->data;
-	
-	// Start thread
-	usbd_tid = k_thread_create(&usbd_thread, 	// Thread struct
-							usbd_stack,			// stack
-							K_THREAD_STACK_SIZE(usbd_stack),
-							m_usbd_task,		// Entry function
-							NULL, NULL, NULL,	// arg1, arg2, arg3
-							7,					// priority
-							0, 					// options)
-							K_NO_WAIT);			// Delay
-
-	sw0_tid = k_thread_create(&sw0_thread,		// Thread struct
-							sw0_stack,			// stack
-							K_THREAD_STACK_SIZE(sw0_stack),
-							m_sw0_task,			// Entry function
-							NULL, NULL, NULL,	// arg1, arg2, arg3
-							7,					// priority
-							0, 					// options)
-							K_NO_WAIT);			// Delay
 	while(1) {
 		printk("Hello blinky\n");
 		
-
-				
-		ret = led0_api->toggle(dev_sw0);
-		if (ret < 0) {
-			printk("ERROR(%d) failed to toggle led0\n", ret);
-		} else {
-			printk("led-toggle\n");
+		switch (led0_state) {
+			case OFF:
+				ret = led0_api->set(dev_led0, M_GPIO_OFF):
+				if (ret < 0) {
+					printk("ERROR(%d) failed to set led0\n", ret);
+				}				
+				break;
+			case ON:
+				ret = led0_api->set(dev_led0, M_GPIO_ON);
+				if (ret < 0) {
+					printk("ERROR(%d) failed to clear led0\n", ret);
+				}
+				break;
+			case TOGGLE:
+				ret = led0_api->toggle(dev_sw0);
+				if (ret < 0) {
+					printk("ERROR(%d) failed to toggle led0\n", ret);
+				}
+				break;
+			default:								
 		}
+		led0_state = NULL;
 
 		// Sleep
 		k_msleep(SLEEP_TIME_MS);
 	}
 	
+}
+
+
+int main(void)
+{
+	k_tid_t tid_led0, tid_sw0;
+
+	// Start thread
+	tid_led0 = k_thread_create(&thread_led0, 	// Thread struct
+							stack_led0,			// stack
+							K_THREAD_STACK_SIZE(stack_led0),
+							thread_led0_func,	// Entry function
+							NULL, NULL, NULL,	// arg1, arg2, arg3
+							7,					// high priority
+							0, 					// options
+							K_NO_WAIT);			// Delay
+
+	tid_sw0 = k_thread_create(&thread_sw0,		// Thread struct
+							stack_sw0,			// stack
+							K_THREAD_STACK_SIZE(stack_sw0),
+							thread_sw0_func,	// Entry function
+							NULL, NULL, NULL,	// arg1, arg2, arg3
+							8,					// low priority
+							0, 					// options
+							K_NO_WAIT);			// Delay
+	while(1) {
+		printk("Hello blinky\n");
+		
+		// Sleep
+		k_msleep(SLEEP_TIME_MS);
+	}
+
 	return 0;
 }
 

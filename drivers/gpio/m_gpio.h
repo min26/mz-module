@@ -6,6 +6,15 @@
 #include <zephyr/drivers/gpio.h>
 
 
+typedef enum {
+    NULL = 0,
+    OFF,
+    ON,
+    TOGGLE,
+} m_gpio_state_t;
+
+
+
 struct m_gpio_api {
     int (*config)(const struct device *dev, int state);
     int (*get)(const struct device *dev, int *state);
