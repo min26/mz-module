@@ -1,4 +1,4 @@
 
 rsource "gpio/Kconfig"
 
-source "usbd/Kconfig.usbd"
+## source "usbd/Kconfig.usbd"

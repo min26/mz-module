@@ -1,11 +1,9 @@
 
 // Matching compatible binding-yaml, devicetree-dts, header
 // compatible="m,gpio"
-#define DT_DRV_COMPAT m_gpio
+// #define DT_DRV_COMPAT m_gpio
 
 #include "m_gpio.h"
-
-#include <zephyr/device.h>
 
 #include <errno.h>
 #include <zephyr/logging/log.h>
@@ -22,19 +20,13 @@ LOG_MODULE_REGISTER(m_gpio);
 //     #error "Node is disabled"
 // #endif
 
-// static int m_gpio_init(const struct device *dev);
-// static int m_gpio_config(const struct device *dev, int state);
-// static int m_gpio_get(const struct device *dev, int *state);
-// static int m_gpio_set(const struct device *dev, int state);
-// static int m_gpio_toggle(const struct device *dev);
 
 /**
  * Call by zephyr kernel
  */
 static int m_gpio_init(const struct device *dev)
 {
-    int ret;
-    // Cast (void*)device->config & (void*)device->data 
+    int ret, io;
     const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
     const struct gpio_dt_spec *gpio_dt = &cfg->dt;
 
@@ -45,31 +37,15 @@ static int m_gpio_init(const struct device *dev)
         LOG_ERR("GPIO is not ready\n");
         return -ENODEV;
     }
-    return 0;
-}
-
-/**
- * Call by m_gpio_api
- */
-static int m_gpio_config(const struct device *dev, int state)
-{
-    int ret;
-    const struct m_gpio_conf *cfg = (const struct m_gpio_conf *)dev->config;
-    const struct gpio_dt_spec *gpio_dt = &cfg->dt;
-    
-    // Check button device is ready
-    if (!gpio_is_ready_dt(gpio_dt)) {
-        LOG_ERR("GPIO is not ready\n");
-        return -ENODEV;
-    }
-    // Set button 
-    if (state == 0) {
+    // Set pin configuration
+    io = cfg->io;
+    if (io == PIN_OUTPUT) {
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_OUTPUT_INACTIVE);
     } else {
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_INPUT);
     }    
     if (ret != 0) {
-        // LOG_ERR("ERROR(%d) Failed to configure GPIO\n", ret);
+        LOG_ERR("ERROR(%d) Failed to config\n", ret);
         return -ENODEV;
     }
 
@@ -128,11 +104,11 @@ static int m_gpio_toggle(const struct device *dev)
     return 0;
 }
 /*********************************************************
- *  Device Tree Handling
+ * DeviceDriver / DeviceTree Handling
+ * struct device {.name, .config, .api, .data}
  */
 
 static const struct m_gpio_api m_gpio_api_func = {
-    .config = m_gpio_config,
     .get = m_gpio_get,
     .set = m_gpio_set,
     .toggle = m_gpio_toggle,
@@ -142,6 +118,7 @@ static const struct m_gpio_api m_gpio_api_func = {
     /* Create instance of config struct */                  \
     static const struct m_gpio_conf m_gpio_conf_##inst = {  \
         .dt = GPIO_DT_SPEC_GET(DT_PHANDLE(DT_INST(inst,m_gpio),pin),gpios),\
+        .io = DT_INSDT_PROP(DT_INST(inst,m_gpio), io),      \
         .id = inst,                                         \
     };                                                      \
     /* Create value of data struct */                       \
@@ -163,4 +140,4 @@ DT_INST_FOREACH_STATUS_OKAY(M_GPIO_DEFINE)
 
 /****************************************************** */
 
-
+mgpio_timer_init()

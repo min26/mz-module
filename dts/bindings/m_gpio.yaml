@@ -3,10 +3,10 @@
 
 
 # Description of drivers
-description: Zephyr Module, M-GPIO
+description: Zephyr Module, M_GPIO
 
 # Compatibility string, matches with DTS and C (DT_DRV_COMPAT m_gpio)
-compatible: "m,gpio"
+compatible: "m_gpio"
 
 # Define node properties
 properties:

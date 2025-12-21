@@ -1,7 +1,7 @@
 / {
-    chosen {
-        zephyr,console = &cdc_acm_uart0;
-    };
+    // chosen {
+    //     zephyr,console = &cdc_acm_uart0;
+    // };
 
     aliases {
         myled0 = &m_led0;
@@ -10,14 +10,14 @@
 
     m_leds {        
         m_led0: led0 {
-            compatible = "m,gpio";
+            compatible = "m_gpio";
             pin = <&user_led0>;
         };
     };    
 
     m_buttons {        
         m_button0: button0 {
-            compatible = "m,gpio";
+            compatible = "m_gpio";
             pin = <&user_button0>;
         };
     };
@@ -44,9 +44,9 @@
 
 };
 
-&zephyr_udc0 {
-    cdc_acm_uart0: cdc_acm_uart0 {
-        compatible = "zephyr,cdc-acm-uart";
-        label = "USB CDC ACM";
-    };
-};
+// &zephyr_udc0 {
+//     cdc_acm_uart0: cdc_acm_uart0 {
+//         compatible = "zephyr,cdc-acm-uart";
+//         label = "USB CDC ACM";
+//     };
+// };
