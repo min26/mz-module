@@ -39,7 +39,7 @@ static int m_gpio_init(const struct device *dev)
     }
     // Set pin configuration
     io = cfg->io;
-    if (io == PIN_OUTPUT) {
+    if (io == M_PIN_OUTPUT) {
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_OUTPUT_INACTIVE);
     } else {
         ret = gpio_pin_configure_dt(gpio_dt, GPIO_INPUT);
@@ -139,5 +139,3 @@ static const struct m_gpio_api m_gpio_api_func = {
 DT_INST_FOREACH_STATUS_OKAY(M_GPIO_DEFINE)
 
 /****************************************************** */
-
-mgpio_timer_init()
