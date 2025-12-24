@@ -3,12 +3,12 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 ## adding board root (with boards folder) - set on zephyr/module.yml as well.
-set(BOARD_ROOT ${CMAKE_SOURCE_DIR}/..)
+set(BOARD_ROOT ${CMAKE_SOURCE_DIR}/../..)
 set(BOARD fmuk64f)
 
 
 ## adding drivers root (location of module's CMakeList)
-set(ZEPHYR_EXTRA_MODULES ${CMAKE_SOURCE_DIR}/..)
+set(ZEPHYR_EXTRA_MODULES ${CMAKE_SOURCE_DIR}/../..)
 
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
