@@ -1,6 +1,6 @@
 
 // Matching compatible binding-yaml, devicetree-dts, header
-// compatible="m,gpio"
+// compatible="m_gpio"
 // #define DT_DRV_COMPAT m_gpio
 
 #include "m_gpio.h"
@@ -77,6 +77,8 @@ static int m_gpio_set(const struct device *dev, int state)
     const struct gpio_dt_spec *gpio_dt = &cfg->dt;
     // const struct m_gpio_data *data = (const struct m_gpio_data *)dev->data;
     // 
+    if (state != M_PIN_OUTPUT) state = M_PIN_INPUT;
+    
     ret = gpio_pin_set_dt(gpio_dt, state);
     // data->state = ret;
     if (ret < 0) {

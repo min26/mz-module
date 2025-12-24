@@ -1,0 +1,11 @@
+##
+## Create new option in menuconfig
+
+
+config M_TIMER
+    bool "M TIMER DRIVER"
+    default n       # Set disable by default
+    help
+        Enable timer workqueue
+
+

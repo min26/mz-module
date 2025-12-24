@@ -8,17 +8,17 @@
         mysw0 = &m_button0;
     };
 
-    m_leds {        
+    m_gpios {        
         m_led0: led0 {
             compatible = "m_gpio";
             pin = <&user_led0>;
+            io = <0>;
         };
-    };    
-
-    m_buttons {        
+          
         m_button0: button0 {
             compatible = "m_gpio";
             pin = <&user_button0>;
+            io = <1>;
         };
     };
    

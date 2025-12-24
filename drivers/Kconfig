@@ -1,4 +1,7 @@
 
 rsource "gpio/Kconfig"
 
+# rsource "timer/Kconfig"
+
+
 ## source "usbd/Kconfig.usbd"

@@ -17,18 +17,18 @@
 #define MY_TASK_PRIORITY		5
 
 
-// Binary semaphore(name, init-count, limit)
-K_SEM_DEFINE(my_sem, 0, 1);
-// Define task-stack
-K_THREAD_STACK_DEFINE(my_stack, MY_TASK_STACK);
-struct k_thread my_task;
+// // Binary semaphore(name, init-count, limit)
+// K_SEM_DEFINE(my_sem, 0, 1);
+// // Define task-stack
+// K_THREAD_STACK_DEFINE(my_stack, MY_TASK_STACK);
+// struct k_thread my_task;
 
-struct device_info {
-	struct k_mutex mutex;
-	struct k_work work;
-	struct k_timer timer;
-	char name[16];
-} my_device;
+// struct device_info {
+// 	struct k_mutex mutex;
+// 	struct k_work work;
+// 	struct k_timer timer;
+// 	char name[16];
+// } my_device;
 
 // USB Device -----------------------------------------------
 // #define DEV_USB_CDC		DT_CHOSEN(zephyr_console)

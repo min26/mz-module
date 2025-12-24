@@ -1,7 +1,6 @@
 ## reference yaml file: zephyr/dts/bindings/input/gpio-keys.yaml
 
 
-
 # Description of drivers
 description: Zephyr Module, M_GPIO
 
@@ -13,4 +12,10 @@ properties:
     pin:
         type: phandle
         required: true
+    io:
+        type: int 
+        default: 1
+        enum:
+            - 0 # output
+            - 1 # input
 
