@@ -1,7 +1,12 @@
-
-rsource "gpio/Kconfig"
-
-# rsource "timer/Kconfig"
+##
+## Create new option in menuconfig
 
 
-## source "usbd/Kconfig.usbd"
+config M_GPIO
+    bool "M GPIO DRIVER"
+    default y       # Set enable by default
+    depends on GPIO # Dependent on GPIO driver
+    help
+        Enable m_gpio driver
+
+

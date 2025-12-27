@@ -1,7 +1,11 @@
+
+
+
+
 / {
-    // chosen {
-    //     zephyr,console = &cdc_acm_uart0;
-    // };
+    chosen {
+        zephyr,console = &cdc_acm_uart0;
+    };
 
     aliases {
         myled0 = &m_led0;
@@ -33,8 +37,6 @@
 
     overlay_gpio_keys {
         compatible = "gpio-keys";   
-    /*    deboune-interval-ms = <50>;   */
-    /*    polling-mode;                 */
 
         user_button0: button_0 {
             label = "Button0 c6";
@@ -44,9 +46,9 @@
 
 };
 
-// &zephyr_udc0 {
-//     cdc_acm_uart0: cdc_acm_uart0 {
-//         compatible = "zephyr,cdc-acm-uart";
-//         label = "USB CDC ACM";
-//     };
-// };
+&zephyr_udc0 {
+    cdc_acm_uart0: cdc_acm_uart0 {
+        compatible = "zephyr,cdc-acm-uart";
+        label = "USB CDC ACM";
+    };
+};

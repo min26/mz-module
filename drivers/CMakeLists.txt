@@ -1,9 +1,16 @@
-# Custon zephyr module drivers
+# Declares the current directory as zephyr library
+# if no-name is given, uses directory name
+zephyr_library()
 
-add_subdirectory_ifdef(CONFIG_M_GPIO gpio)
+# Add header file directories
+zephyr_include_directories(.)
 
-# add_subdirectory_ifdef(CONFIG_M_TIMER timer)
+# List source code files 
+zephyr_library_sources(
+    m_button.c
+    m_console.c
+    m_timer.c)
 
-## add_subdirectory_ifdef(CONFIG_M_USBD usbd)
+
 
 
